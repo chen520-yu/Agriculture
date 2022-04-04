@@ -1,0 +1,24 @@
+.clock-hour-min{
+    width: 108px;
+    position:relative
+}
+.clock-unit{
+    display: inline-block;
+    font-size: 20px;
+    text-align: center;
+}
+.icon-container{
+    height: 30px;
+}
+.arrow-icon{
+    width: 20px;
+    cursor: pointer;
+}
+.arrow-down{
+    transform: rotate(180deg);
+}
+.colon-time{
+    position:absolute;
+    top: 28px;
+    margin-left:8px ;
+}

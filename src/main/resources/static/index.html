@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <title>IoT Smart Streetlight</title>
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="./css/page.css" rel="stylesheet">
+  <link href="./css/clock.css" rel="stylesheet">
+</head>
+  <body>
+
+  <section class="page-header">
+	<div class="main-info">
+		<div class="img-box"><img src="./img/lamp-close.png"/></div>
+		<div class="right-box">
+			<div class="vertical-wrapper">
+				<h1 class="prod-name">智慧路灯</h1>
+			</div>
+		</div>
+	</div>
+  </section>
+
+  <main class="page-content">
+	<section class="content-paper">
+		<div class="bread-crumbs"><h2>属性参数</h2></div>
+		<div class="main-content-form">
+			<div class="form">
+				<div class="form-group">
+					<label class="form-label">设备标识</label>
+					<div class="form-control">
+						<input type="text" id="verifyCode" placeholder="请输入MAC或者IMEI"/>
+						<button class="btn primary" onclick="hwOceanConnectDemo.regDevice(this)" >注册设备</button>
+						<button class="btn btn-default" onclick="hwOceanConnectDemo.openSetParamsDialog()" >参数设置</button>
+					</div>
+					<p class="help-block"></p>
+				</div>
+
+
+			</div>
+		</div>
+
+		<div class="bread-crumbs toggle-block hide"><h2>状态查看</h2></div>
+		<div class="main-content-status toggle-block ">
+			<ul class="stat-block" >
+				<li class="stat-item">
+					<div class="stat-title" ><h3>灯状态</h3></div>
+					<div class="stat-container">
+						<div class="vertical-wrapper">
+							<h5 id="lightStatus">灯状态：关</h5>
+							<img class="prod-stat-img open" src="./img/lamp-open.png" />
+							<img class="prod-stat-img close active" src="./img/lamp-close.png" />
+						</div>
+					</div>
+				</li>
+				<li class="stat-item">
+					<div class="stat-title" ><h3>路灯控制</h3></div>
+					<div class="stat-container text">
+						<div class="vertical-wrapper">
+							<h4 class="point-title">控制模式</h4>
+							<select id="ctrlMode">
+								<option value="terminal">终端联控模式</option>
+								<option value="timeRange">分段定时模式</option>
+								<option value="autoLux">自动调光模式</option>
+							</select>
+
+							<div id="terminal" class="combo-item show">
+								<p class="ctrl-title">开关选择</p>
+								<select id="statusCombo">
+									<option value="ON">开</option>
+									<option value="OFF">关</option>
+								</select>
+								<button class="button-custom primar y" onclick="hwOceanConnectDemo.setOpenClose()" >设置</button>
+							</div>
+
+							<div id="timeRange" class="combo-item">
+								<p class="ctrl-title">关灯时间段</p>
+								<div style="position: relative">
+									<div style="display: inline-block" id="clock1" class="clock-hour-min">
+										<div class="clock-unit hour-zone" style="width:40px;height: 90px">
+											<div class="time-up-button icon-container">
+												<img src="img/up-arrow.svg" class="arrow-icon">
+											</div>
+											<div class="hourNum">6</div>
+											<div class="time-down-button icon-container">
+												<img src="img/up-arrow.svg" class="arrow-icon arrow-down">
+											</div>
+										</div>
+										<div class="clock-unit colon" style="width:20px;height: 80px">
+											<p class="colon-time">:</p>
+										</div>
+										<div class="clock-unit min-zone" style="width:40px;height: 80px">
+											<div class="time-up-button">
+												<img src="img/up-arrow.svg" class="arrow-icon">
+											</div>
+											<div class="minuteNum">30</div>
+											<div class="time-down-button">
+												<img src="img/up-arrow.svg" class="arrow-icon arrow-down">
+											</div>
+										</div>
+									</div>
+									<h5 style="display: inline-block; margin-right: 20px;margin-left: 14px;    font-size: 40px;top: -24px; position: relative;">-</h5>
+									<div style="display: inline-block" id="clock2" class="clock-hour-min">
+										<div class="clock-unit hour-zone" style="width:40px;height: 90px">
+											<div class="time-up-button icon-container">
+												<img src="img/up-arrow.svg" class="arrow-icon">
+											</div>
+											<div class="hourNum">18</div>
+											<div class="time-down-button icon-container">
+												<img src="img/up-arrow.svg" class="arrow-icon arrow-down">
+											</div>
+										</div>
+										<div class="clock-unit colon" style="width:20px;height: 80px">
+											<p class="colon-time">:</p>
+										</div>
+										<div class="clock-unit min-zone" style="width:40px;height: 80px">
+											<div class="time-up-button">
+												<img src="img/up-arrow.svg" class="arrow-icon">
+											</div>
+											<div class="minuteNum">30</div>
+											<div class="time-down-button">
+												<img src="img/up-arrow.svg" class="arrow-icon arrow-down">
+											</div>
+										</div>
+									</div>
+									<button class="button-custom primary" onclick="hwOceanConnectDemo.setTimeRange()" >设置</button>
+								</div>
+							</div>
+
+							<div id="autoLux" class="combo-item">
+								<div class="form">
+									<div class="form-group">
+										<label class="ctrl-title">亮度阀值</label>
+										<div class="form-control">
+											<input style="width: 170px" type="text" id="deviceLuxThreshold" placeholder="" />
+											<button class="btn primary" onclick="hwOceanConnectDemo.setDeviceLuxThreshold(this)" >设置</button>
+										</div>
+										<p class="help-block">提示 : 当光照传感器上报检测值小于阀值时，应用下发开灯命令，大于阈值时下发关灯命令，如果阈值设置为0，则禁用该此功能。</p>
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+					</div>
+				</li>
+				<li class="stat-item">
+					<div class="stat-title" ><h3>环境亮度</h3></div>
+					<div class="stat-container text">
+						<div class="vertical-wrapper">
+							<h4 class="point-title">亮度值</h4>
+							<p class="point-text"><span id="luxVal">0</span><span>LUX</span></p>
+						</div>
+					</div>
+				</li>
+				<li class="stat-item">
+					<div class="stat-title" ><h3>环境温度</h3></div>
+					<div class="stat-container text">
+						<div class="vertical-wrapper">
+							<h4 class="point-title">温度值</h4>
+							<p class="point-text"><span id="tempture">0</span><span>℃</span></p>
+						</div>
+					</div>
+				</li>
+				<li class="stat-item">
+					<div class="stat-title" ><h3>环境湿度</h3></div>
+					<div class="stat-container text">
+						<div class="vertical-wrapper">
+							<h4 class="point-title">湿度值</h4>
+							<p class="point-text"><span id="humidity">0</span><span>RH</span></p>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</section>
+  </main>
+
+  <section>
+	<div class="modal fade ng-scope" id="modalDialog" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="content-block" style="width: 480px;">
+					<div class="modal-header">
+						<h5 id="dialogTitle" class="modal-title">提示</h5>
+						<span class="close close-modal">
+							<svg class="iot-svg-icon">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon_not_through"></use>
+							</svg>
+						</span>
+					</div>
+					<div class="modal-body">
+						<div class="tips-dialog-content">
+							<svg class="iot-svg-icon iot-blue font48 states-icon success">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon_successful"></use>
+							</svg>
+							<svg class="iot-svg-icon iot-red font48 states-icon error">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon_close"></use>
+							</svg>
+							<svg class="iot-svg-icon iot-blue font48 states-icon info">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon_Information"></use>
+							</svg>
+							<p id="dialogContent" class="tips-dialog-text"></p>
+							<p id="dialogContentDevId" class="tips-dialog-text hide"></p>
+							<p id="dialogContentSecet" class="tips-dialog-text hide"></p>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary close-modal">确认</button>
+						<button class="btn btn-default close-modal btn-cancel">取消</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade ng-scope" id="setParamsDialog" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="content-block" style="width: 38.4rem;">
+					<div class="modal-header">
+						<h5 class="modal-title">参数设置</h5>
+						<span class="close close-modal">
+							<svg class="iot-svg-icon">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon_not_through"></use>
+							</svg>
+						</span>
+					</div>
+					<div class="modal-body">
+						<div class="params-form">
+							<h5>数据来源</h5>
+							<div class="form-group-table">
+								<label class="form-label">
+									<span class="text">数据来源</span>
+								</label>
+								<div class="form-control">
+									<select id="dataSource">
+										<option value="DIS">数据接入服务</option>
+										<option value="subscribe">订阅推送</option>
+									</select>
+								</div>
+							</div>
+
+							<div id="sbscrbInfo" class="info-tags">
+								<h5>订阅信息</h5>
+								<div class="form-group-table">
+									<label class="form-label">
+										<span class="text">本机IP:</span>
+									</label>
+									<div class="form-control">
+										<input type="text" placeholder="" name="callbackIp">
+									</div>
+								</div>
+							</div>
+
+							<div id="tunnelInfo" class="info-tags show">
+								<h5>通道信息</h5>
+								<div class="form-group-table">
+									<label class="form-label">
+										<span class="text">访问密钥ID:</span>
+									</label>
+									<div class="form-control">
+										<input type="text" placeholder="" name="ak">
+									</div>
+								</div>
+								<div class="form-group-table">
+									<label class="form-label">
+										<span class="text">秘密访问密钥:</span>
+									</label>
+									<div class="form-control">
+										<input type="text" placeholder="" name="sk">
+									</div>
+								</div>
+								<div class="form-group-table">
+									<label class="form-label">
+										<span class="text">通道名称:</span>
+									</label>
+									<div class="form-control">
+										<input type="text" placeholder="" name="streamName">
+									</div>
+								</div>
+							</div>
+							<h5>消息通知</h5>
+							<div class="form-group-table">
+								<label class="form-label">
+									<span class="text">主题URN:</span>
+								</label>
+								<div class="form-control">
+									<input type="text" placeholder="" name="topicUrn">
+								</div>
+							</div>
+							<h5>资源空间</h5>
+							<div class="form-group-table">
+								<label class="form-label">
+									<span class="text">APPID:</span>
+								</label>
+								<div class="form-control">
+									<input type="text" placeholder="" name="app_id">
+								</div>
+							</div>
+							<h5>API凭证</h5>
+                            <div class="form-group-table">
+                                <label class="form-label">
+                                    <span class="text">账号名:</span>
+                                </label>
+                                <div class="form-control">
+                                    <input type="text" placeholder="" name="domain">
+                                </div>
+                            </div>
+                            <div class="form-group-table">
+								<label class="form-label">
+									<span class="text">IAM用户名:</span>
+								</label>
+								<div class="form-control">
+									<input type="text" placeholder="" name="name">
+								</div>
+							</div>
+							<div class="form-group-table">
+								<label class="form-label">
+									<span class="text">IAM用户密码:</span>
+								</label>
+								<div class="form-control">
+									<input type="text" placeholder="" name="password">
+								</div>
+							</div>
+                            <div class="form-group-table">
+                                <label class="form-label">
+                                	<span class="text">项目ID:</span>
+                            	</label>
+                            	<div class="form-control">
+                            	    <input type="text" placeholder="" name="projectId">
+                            	</div>
+                            </div>
+							<h5>产品信息</h5>
+							<div class="form-group-table">
+								<label class="form-label">
+									<span class="text">产品ID:</span>
+								</label>
+								<div class="form-control">
+									<input type="text" placeholder="" name="product_id">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary confirm-btn close-modal">确定</button>
+						<button class="btn btn-default close-modal">取消</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+  </section>
+  <script type='text/javascript' src="./js/echarts.min.js"></script>
+  <script src="./js/jquery-3.3.1.min.js"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/clock.js"></script>
+  <script>
+   hwOceanConnectDemo.changeComboBox()
+  </script>
+
+
+    <div id="svg-icon-box" style="display:none;">
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;" xml:space="preserve">
+			<style type="text/css">
+				.svg_line{ fill:none;stroke:#fff;stroke-width:4;stroke-miterlimit:10; }
+				.fillRule{ fill-rule:evenodd; }
+				.clipRule{clip-rule:evenodd;}
+			</style>
+			<defs>
+				<linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+					<stop offset="0%" stop-color="#4a90e2"></stop>
+					<stop offset="100%" stop-color="#ee762e"></stop>
+				</linearGradient>
+			</defs>
+			<symbol id="icon_not_through" viewBox="0 0 48 48">
+				<polygon class="fillRule clipRule" points="42.2,8.4 39.4,5.5 24,21.2 8.5,5.5 5.7,8.4 21.1,24 5.7,39.7 8.5,42.5 24,26.9 39.4,42.5 42.2,39.7 26.8,24 "></polygon>
+			</symbol>
+			<symbol id="icon_successful" viewBox="0 0 48 48">
+				<path d="M24,2C11.8,2,2,11.8,2,24s9.8,22,22,22s22-9.8,22-22S36.2,2,24,2z M21.3,32.5l-8.5-8.4l2.8-2.8l5.7,5.6l11.2-11.4l2.8,2.8 L21.3,32.5z"></path>
+			</symbol>
+			<symbol id="icon_close" viewBox="0 0 48 48">
+				<path d="M24,2.2c-12.2,0-22,9.8-22,22s9.8,22,22,22s22-9.8,22-22S36.2,2.2,24,2.2z M32.5,29.9l-2.8,2.8L24,27.1
+					l-5.7,5.7l-2.8-2.8l5.7-5.7l-5.7-5.7l2.8-2.8l5.7,5.7l5.7-5.7l2.8,2.8l-5.7,5.7L32.5,29.9z"></path>
+			</symbol>
+			<symbol id="icon_Information" viewBox="0 0 48 48">
+				<path class="fillRule clipRule" d="M46,24c0-12.2-9.8-22-22-22S2,11.8,2,24s9.8,22,22,22S46,36.2,46,24z M26,18h-4v-4h4V18z M26,34h-4V22h4V34z"></path>
+			</symbol>
+		</svg>
+	</div>
+  </body>
+</html>
